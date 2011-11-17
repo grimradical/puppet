@@ -103,4 +103,27 @@ describe Puppet::Type.type(:file).attrclass(:mode) do
       mode.retrieve.should == '644'
     end
   end
+
+  describe "#change_to_s" do
+    it "should output 4 digits for 3 digit 'is' mode" do
+      mode.change_to_s('644', '755').should =~ /'0644'/
+    end
+
+    it "should output 4 digits for 3 digit 'should' mode" do
+      mode.change_to_s('644', '755').should =~ /'0755'/
+    end
+
+    it "should output 4 digits for 4 digit 'is' mode" do
+      mode.change_to_s('1644', '755').should =~ /'1644'/
+    end
+
+    it "should output 4 digits for 4 digit 'should' mode" do
+      mode.change_to_s('644', '1755').should =~ /'1755'/
+    end
+
+    it "should output 4 digits for 4 digit modes that start with 0" do
+      mode.change_to_s('0644', '0755').should =~ /'0644'/
+      mode.change_to_s('0644', '0755').should =~ /'0755'/
+    end
+  end
 end
